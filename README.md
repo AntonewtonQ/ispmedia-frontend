@@ -82,24 +82,25 @@ Este projeto é uma plataforma completa para gestão e interação com conteúdo
 ## 📂 Estrutura de Pastas
 
 src/
- ├─ app/
- │  ├─ dashboard/
- │  │  ├─ albuns/
- │  │  ├─ artistas/
- │  │  ├─ musicas/
- │  │  ├─ playlists/
- │  │  ├─ perfil/
- │  │  └─ ...
- ├─ components/
- │  ├─ playlist/
- │  ├─ musica/
- │  ├─ ui/
- │  └─ ...
- ├─ context/
- │  └─ AuthContext.tsx
- ├─ models/
- ├─ styles/
- └─ utils/
+├── app/
+│   ├── dashboard/
+│   │   ├── albuns/
+│   │   ├── artistas/
+│   │   ├── musicas/
+│   │   ├── playlists/
+│   │   ├── perfil/
+│   │   └── ...
+├── components/
+│   ├── playlist/
+│   ├── musica/
+│   ├── ui/
+│   └── ...
+├── context/
+│   └── AuthContext.tsx
+├── models/
+├── styles/
+└── utils/
+
 
 ## 📌 Instruções de Uso
 
