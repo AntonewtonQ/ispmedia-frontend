@@ -15,9 +15,10 @@ import { useAuth } from "@/context/AuthContext";
 
 interface Props {
   onSuccess?: () => void;
+  albumId?: number; // ⬅️ opcional, usado para adicionar diretamente a um álbum
 }
 
-export function AddMusicaModal({ onSuccess }: Props) {
+export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
   const { token } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -35,7 +36,6 @@ export function AddMusicaModal({ onSuccess }: Props) {
   const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
-    // buscar artistas e albuns
     async function fetchData() {
       try {
         const a1 = await fetch("http://localhost:1024/api/artistas");
@@ -45,9 +45,8 @@ export function AddMusicaModal({ onSuccess }: Props) {
         const a2Data = await a2.json();
         setArtistas(a1Data);
         setAlbuns(a2Data);
-      } catch (error) {
+      } catch {
         setErro("Erro ao carregar artistas e álbuns");
-        return;
       }
     }
 
@@ -68,9 +67,7 @@ export function AddMusicaModal({ onSuccess }: Props) {
 
         const uploadRes = await fetch("http://localhost:1024/api/uploads", {
           method: "POST",
-          headers: {
-            Authorization: `${token}`,
-          },
+          headers: { Authorization: `${token}` },
           body: formData,
         });
 
@@ -91,14 +88,13 @@ export function AddMusicaModal({ onSuccess }: Props) {
           duracao: Number(duracao),
           compositor,
           artistaId: Number(artistaId),
-          albumId: Number(albumId),
+          albumId: propAlbumId ? Number(propAlbumId) : Number(albumId),
           uploadId,
         }),
       });
 
       if (!musicaRes.ok) throw new Error("Erro ao criar música");
 
-      // limpar e fechar
       setTitulo("");
       setDuracao("");
       setCompositor("");
@@ -159,19 +155,21 @@ export function AddMusicaModal({ onSuccess }: Props) {
               </option>
             ))}
           </select>
-          <select
-            value={albumId}
-            onChange={(e) => setAlbumId(e.target.value)}
-            required
-            className="w-full border rounded px-3 py-2"
-          >
-            <option value="">Selecione um álbum</option>
-            {albuns.map((a) => (
-              <option key={a.id} value={a.id}>
-                {a.titulo}
-              </option>
-            ))}
-          </select>
+          {!propAlbumId && (
+            <select
+              value={albumId}
+              onChange={(e) => setAlbumId(e.target.value)}
+              required
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value="">Selecione um álbum</option>
+              {albuns.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.titulo}
+                </option>
+              ))}
+            </select>
+          )}
           <Input
             type="file"
             accept="audio/*"

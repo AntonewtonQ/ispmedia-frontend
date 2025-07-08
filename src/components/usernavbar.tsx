@@ -64,7 +64,7 @@ export const UserNavbar = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => router.push("/perfil")}
+          onClick={() => router.push("/dashboard/perfil")}
         >
           <User className="w-5 h-5" />
         </Button>

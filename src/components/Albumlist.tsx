@@ -39,9 +39,13 @@ export default function AlbumList() {
             key={album.id}
             className="bg-white shadow-sm hover:shadow-md transition"
           >
-            {album.imagemUrl && (
+            {album.uploadId && (
               <img
-                src={album.imagemUrl}
+                src={
+                  album.uploadId
+                    ? `http://localhost:1024/files/${album.uploadId}`
+                    : ""
+                }
                 alt={album.titulo}
                 className="w-full h-48 object-cover rounded-t-md grayscale"
               />

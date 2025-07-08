@@ -28,7 +28,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
 
   useEffect(() => {
     async function fetchUpload() {
-      if (!album.uploadId) return;
+      if (!album.uploadId || !token) return;
 
       try {
         const res = await fetch(
@@ -48,10 +48,24 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
     fetchUpload();
   }, [album.uploadId, token]);
 
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Previne a navegação
+    onEdit(album);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Previne a navegação
+    onDelete();
+  };
+
+  const handleCardClick = () => {
+    router.push(`/dashboard/albuns/${album.id}`);
+  };
+
   return (
     <Card
-      onClick={() => router.push(`/dashboard/albuns/${album.id}`)}
-      className="w-full max-w-sm shadow-md cursor-pointer"
+      onClick={handleCardClick}
+      className="w-full max-w-sm shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-200"
     >
       <CardHeader className="p-0 h-40 overflow-hidden rounded-t-md">
         {upload?.nomeArquivo ? (
@@ -76,10 +90,10 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
           {new Date(album.dataLancamento).toLocaleDateString("pt-PT")}
         </p>
         <div className="flex justify-end gap-2 mt-2">
-          <Button size="sm" onClick={() => onEdit(album)} variant="secondary">
+          <Button size="sm" onClick={handleEdit} variant="secondary">
             <Pencil className="w-4 h-4" />
           </Button>
-          <Button size="sm" onClick={onDelete} variant="destructive">
+          <Button size="sm" onClick={handleDelete} variant="destructive">
             <Trash2 className="w-4 h-4" />
           </Button>
         </div>

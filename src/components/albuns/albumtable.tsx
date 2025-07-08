@@ -1,19 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
-import { Trash2 } from "lucide-react";
-import { Album } from "@/models/Album";
+import { Album } from "@/models/Album"; // Certifique-se que o caminho está correto
 import { EditAlbumModal } from "./editalbummodal";
+import { AlbumCard } from "./cardalbum";
 
 interface AlbumTableProps {
   albuns?: Album[];
@@ -71,49 +62,42 @@ const AlbumTable = ({ termoPesquisa }: AlbumTableProps) => {
     a.titulo.toLowerCase().includes(termoPesquisa.toLowerCase())
   );
 
+  if (loading) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Lista de Álbuns</h1>
+        <div className="flex items-center justify-center h-64">
+          <p className="text-gray-500">Carregando álbuns...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Lista de Álbuns</h1>
-      {erro && <p className="text-red-500">{erro}</p>}
-      <div className="overflow-x-auto border rounded-md">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Título</TableHead>
-              <TableHead>Descrição</TableHead>
-              <TableHead>Data de Criação</TableHead>
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {albunsFiltrados.map((album) => (
-              <TableRow key={album.id}>
-                <TableCell>{album.id}</TableCell>
-                <TableCell>{album.titulo}</TableCell>
-                <TableCell className="max-w-[300px] truncate text-gray-700">
-                  {album.descricao}
-                </TableCell>
-                <TableCell>
-                  {new Date(album.dataLancamento).toLocaleDateString("pt-PT")}
-                </TableCell>
-                <TableCell className="space-x-2">
-                  <Button size="sm" onClick={() => setAlbumParaEditar(album)}>
-                    Editar
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => handleDelete(album.id)}
-                  >
-                    <Trash2 />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      {erro && <p className="text-red-500 mb-4">{erro}</p>}
+
+      {albunsFiltrados.length === 0 ? (
+        <div className="flex items-center justify-center h-64">
+          <p className="text-gray-500">
+            {termoPesquisa
+              ? `Nenhum álbum encontrado para "${termoPesquisa}"`
+              : "Nenhum álbum encontrado"}
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+          {albunsFiltrados.map((album) => (
+            <AlbumCard
+              key={album.id}
+              album={album}
+              onEdit={(album) => setAlbumParaEditar(album)}
+              onDelete={() => handleDelete(album.id)}
+            />
+          ))}
+        </div>
+      )}
 
       {albumParaEditar && (
         <EditAlbumModal

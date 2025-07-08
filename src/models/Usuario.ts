@@ -3,5 +3,5 @@ export interface Usuario {
   nome: string;
   email: string;
   tipo: 'ADMIN' | 'EDITOR' | 'VISITANTE';
-  criadoEm: string;
+  dataInscricao: string;
 }

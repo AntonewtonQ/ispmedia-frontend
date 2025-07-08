@@ -6,4 +6,5 @@ export interface Musica {
   albumId: number;
   artistaId: number;
   uploadId?: number;
+  musicaId?:number;
 }
