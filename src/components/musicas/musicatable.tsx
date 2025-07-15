@@ -59,8 +59,8 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
 
         // Buscar uploads de forma assíncrona
         const uploadIds = data
-          .map((m: any) => m.uploadId)
-          .filter((id: any): id is number => typeof id === "number");
+          .map((m: Musica) => m.uploadId)
+          .filter((id: number | null): id is number => typeof id === "number");
 
         const uniqueIds = Array.from(new Set(uploadIds));
         await Promise.all(uniqueIds.map((id) => getUpload(Number(id))));

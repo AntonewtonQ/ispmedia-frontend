@@ -1,10 +1,16 @@
-// app/artistas/[id]/page.tsx
+import Image from "next/image";
+import { Album } from "@/models/Album";
+import { Musica } from "@/models/Musica";
 import { notFound } from "next/navigation";
 
-type Params = { params: { id: string } };
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-export default async function ArtistaDetalhePage({ params }: Params) {
-  const res = await fetch(`http://localhost:1024/api/artistas/${params.id}`, {
+export default async function ArtistaPage({ params }: PageProps) {
+  const { id } = await params;
+
+  const res = await fetch(`http://localhost:1024/api/artistas/${id}`, {
     cache: "no-store",
   });
   if (!res.ok) return notFound();
@@ -12,10 +18,10 @@ export default async function ArtistaDetalhePage({ params }: Params) {
   const artista = await res.json();
 
   const albunsRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/albuns`
+    `http://localhost:1024/api/artistas/${id}/albuns`
   );
   const musicasRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/musicas`
+    `http://localhost:1024/api/artistas/${id}/musicas`
   );
   const albuns = albunsRes.ok ? await albunsRes.json() : [];
   const musicas = musicasRes.ok ? await musicasRes.json() : [];
@@ -28,9 +34,11 @@ export default async function ArtistaDetalhePage({ params }: Params) {
 
       {artista.imagemUrl && (
         <div className="w-full max-h-[450px] overflow-hidden rounded-2xl shadow-lg mb-8">
-          <img
+          <Image
             src={artista.imagemUrl}
             alt={artista.nome}
+            width={800}
+            height={450}
             className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500 ease-in-out"
           />
         </div>
@@ -46,7 +54,7 @@ export default async function ArtistaDetalhePage({ params }: Params) {
           Álbuns
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-          {albuns.map((album: any) => (
+          {albuns.map((album: Album) => (
             <div
               key={album.id}
               className="bg-white shadow hover:shadow-lg rounded-xl p-4 border border-gray-100 transition duration-300"
@@ -64,7 +72,7 @@ export default async function ArtistaDetalhePage({ params }: Params) {
           Músicas
         </h2>
         <ul className="space-y-4">
-          {musicas.map((musica: any) => (
+          {musicas.map((musica: Musica) => (
             <li
               key={musica.id}
               className="bg-gray-50 hover:bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-200 transition"

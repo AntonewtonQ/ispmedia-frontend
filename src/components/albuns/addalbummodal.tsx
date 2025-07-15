@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Album } from "@/models/Album";
+import { Artista } from "@/models/Artista";
 
 interface Props {
   onSuccess?: (albumCriado: Album) => void;
@@ -29,7 +30,7 @@ export function AddAlbumModal({ onSuccess }: Props) {
   const [dataLancamento, setDataLancamento] = useState("");
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [artistas, setArtistas] = useState<any[]>([]);
+  const [artistas, setArtistas] = useState<Artista[]>([]);
 
   useEffect(() => {
     async function fetchArtistas() {
@@ -96,8 +97,9 @@ export function AddAlbumModal({ onSuccess }: Props) {
       setDataLancamento("");
       setOpen(false);
       onSuccess?.(albumCriado);
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

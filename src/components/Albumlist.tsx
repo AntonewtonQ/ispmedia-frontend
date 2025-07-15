@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Album } from "@/models/Album";
 import {
   Card,
@@ -40,13 +41,15 @@ export default function AlbumList() {
             className="bg-white shadow-sm hover:shadow-md transition"
           >
             {album.uploadId && (
-              <img
+              <Image
                 src={
                   album.uploadId
                     ? `http://localhost:1024/files/${album.uploadId}`
                     : ""
                 }
                 alt={album.titulo}
+                width={200}
+                height={200}
                 className="w-full h-48 object-cover rounded-t-md grayscale"
               />
             )}

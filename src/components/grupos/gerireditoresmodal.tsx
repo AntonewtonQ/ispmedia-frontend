@@ -74,8 +74,9 @@ export function GerirEditoresModal({ grupoId, open, onClose }: Props) {
       const novo = await res.json();
       setEditores((prev) => [...prev, novo]);
       setUsuarioId("");
-    } catch (err: any) {
-      setErro(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

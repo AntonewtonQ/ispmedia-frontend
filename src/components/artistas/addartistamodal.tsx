@@ -46,8 +46,9 @@ export function AddArtistaModal({ onSuccess }: { onSuccess?: () => void }) {
       setGenero("");
       setOpen(false);
       onSuccess?.();
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -49,8 +49,9 @@ export function EditGrupoModal({ grupo, onSuccess, onClose }: Props) {
       const updated = await res.json();
       onSuccess(updated);
       setOpen(false);
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

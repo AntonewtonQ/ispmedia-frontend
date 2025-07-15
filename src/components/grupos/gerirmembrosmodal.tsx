@@ -77,8 +77,9 @@ export function GerirMembrosModal({ grupoId, open, onClose }: Props) {
       setUsuarioId("");
       const atualizado = await res.json();
       setMembros((prev) => [...prev, atualizado]);
-    } catch (err: any) {
-      setErro(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

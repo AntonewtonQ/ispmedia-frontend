@@ -59,8 +59,9 @@ export function EditArtistaModal({
       if (!res.ok) throw new Error("Erro ao atualizar artista");
 
       onSuccess?.();
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

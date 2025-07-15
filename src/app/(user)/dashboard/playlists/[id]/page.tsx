@@ -15,6 +15,12 @@ interface Upload {
   nomeArquivo: string;
 }
 
+interface PlaylistMusica {
+  id: number;
+  musicaId: number;
+  playlistId: number;
+}
+
 export default function PlaylistDetalhesPage() {
   const { token } = useAuth();
   const params = useParams();
@@ -48,7 +54,7 @@ export default function PlaylistDetalhesPage() {
         const detalhesMap: Record<number, Musica> = {};
 
         await Promise.all(
-          data.musicas.map(async (m: any) => {
+          data.musicas.map(async (m: PlaylistMusica) => {
             const musicaRes = await fetch(
               `http://localhost:1024/api/musicas/${m.musicaId}`,
               {
@@ -116,7 +122,7 @@ export default function PlaylistDetalhesPage() {
         setMusicasDetalhadas({});
         setUploads({});
       }
-    } catch (error) {
+    } catch {
       alert("Erro ao remover música da playlist");
     } finally {
       setRemovendoMusicaId(null);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import { Album } from "@/models/Album";
 import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +17,14 @@ interface Upload {
   nomeArquivo: string;
 }
 
+interface MusicaWithUpload {
+  id: number;
+  titulo: string;
+  duracao: string;
+  compositor: string;
+  uploadId: number | null;
+}
+
 export default function AlbumDetalhesPage() {
   const { token, user } = useAuth();
   const params = useParams();
@@ -26,9 +35,6 @@ export default function AlbumDetalhesPage() {
   const [comentario, setComentario] = useState("");
   const [pontuacao, setPontuacao] = useState(5);
   const [erro, setErro] = useState<string | null>(null);
-  const [editandoCriticaId, setEditandoCriticaId] = useState<number | null>(
-    null
-  );
   const [novaPontuacao, setNovaPontuacao] = useState<number>(5);
   const [novoComentario, setNovoComentario] = useState<string>("");
 
@@ -37,37 +43,7 @@ export default function AlbumDetalhesPage() {
   );
   const [editando, setEditando] = useState(false);
 
-  async function handleAtualizarCritica(criticaId: number) {
-    try {
-      const res = await fetch(
-        `http://localhost:1024/api/criticas/${criticaId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-          body: JSON.stringify({
-            comentario: novoComentario,
-            pontuacao: novaPontuacao,
-          }),
-        }
-      );
 
-      if (!res.ok) throw new Error("Erro ao atualizar crítica");
-
-      setEditandoCriticaId(null);
-      const atualizada = await fetch(
-        `http://localhost:1024/api/albums/${albumId}`,
-        {
-          headers: { Authorization: `${token}` },
-        }
-      ).then((res) => res.json());
-      setAlbum(atualizada);
-    } catch {
-      alert("Erro ao atualizar crítica");
-    }
-  }
 
   async function handleRemoverCritica(criticaId: number) {
     const confirmar = confirm("Tem certeza que deseja eliminar esta crítica?");
@@ -123,10 +99,10 @@ export default function AlbumDetalhesPage() {
 
         // Uploads das músicas
         const musicasComUpload = data.musicas.filter(
-          (m: any) => m.uploadId !== null
+          (m: MusicaWithUpload) => m.uploadId !== null
         );
         const uploadResults = await Promise.all(
-          musicasComUpload.map((m: any) =>
+          musicasComUpload.map((m: MusicaWithUpload) =>
             fetch(`http://localhost:1024/api/uploads/${m.uploadId}`, {
               headers: { Authorization: `${token}` },
             })
@@ -136,8 +112,8 @@ export default function AlbumDetalhesPage() {
         );
 
         const uploadsMap: Record<number, Upload> = {};
-        musicasComUpload.forEach((m: any, idx: number) => {
-          if (uploadResults[idx]) {
+        musicasComUpload.forEach((m: MusicaWithUpload, idx: number) => {
+          if (uploadResults[idx] && m.uploadId) {
             uploadsMap[m.uploadId] = uploadResults[idx];
           }
         });
@@ -189,9 +165,11 @@ export default function AlbumDetalhesPage() {
           <Card className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6 p-6">
             <div className="w-full md:w-64 h-64 bg-gray-200 rounded overflow-hidden flex items-center justify-center">
               {upload?.nomeArquivo ? (
-                <img
+                <Image
                   src={`http://localhost:1024/files/${upload.nomeArquivo}`}
                   alt={album.titulo}
+                  width={256}
+                  height={256}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -227,9 +205,9 @@ export default function AlbumDetalhesPage() {
                     .then((data) => setAlbum(data));
                 }}
               />
-              {album.musicas?.length! > 0 ? (
+              {album.musicas && album.musicas.length > 0 ? (
                 <ul className="space-y-2">
-                  {album.musicas!.map((m) => (
+                  {album.musicas.map((m) => (
                     <li
                       key={m.id}
                       className="border rounded p-3 bg-gray-50 space-y-1"

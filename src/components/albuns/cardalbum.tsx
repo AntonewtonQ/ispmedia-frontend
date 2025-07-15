@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Album } from "@/models/Album";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -69,9 +70,11 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
     >
       <CardHeader className="p-0 h-40 overflow-hidden rounded-t-md">
         {upload?.nomeArquivo ? (
-          <img
+          <Image
             src={`http://localhost:1024/files/${upload.nomeArquivo}`}
             alt={album.titulo}
+            width={200}
+            height={160}
             className="w-full h-full object-cover"
           />
         ) : (

@@ -23,8 +23,9 @@ const LoginPage = () => {
     try {
       await login(email, password);
       router.push("/dashboard");
-    } catch (e: any) {
-      setError(e.message || "Erro no login");
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : "Erro no login";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

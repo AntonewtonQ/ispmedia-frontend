@@ -53,8 +53,9 @@ export function AddPlaylistModal({ onSuccess }: Props) {
       setVisibilidade("PUBLICA");
       setOpen(false);
       onSuccess?.(novaPlaylist);
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }

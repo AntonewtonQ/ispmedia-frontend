@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Artista } from "@/models/Artista";
+import { Album } from "@/models/Album";
+import { Musica } from "@/models/Musica";
 import {
   Table,
   TableBody,
@@ -72,8 +74,8 @@ const Artistatable = ({ termoPesquisa }: ArtistatableProps) => {
         setDetalhes((prev) => ({
           ...prev,
           [artistaId]: {
-            albuns: albunsRes.map((a: any) => a.titulo),
-            musicas: musicasRes.map((m: any) => m.titulo),
+            albuns: albunsRes.map((a: Album) => a.titulo),
+            musicas: musicasRes.map((m: Musica) => m.titulo),
           },
         }));
       } catch {

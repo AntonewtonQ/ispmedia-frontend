@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { Album } from "@/models/Album";
+import { Artista } from "@/models/Artista";
 
 interface Props {
   onSuccess?: () => void;
@@ -29,8 +31,8 @@ export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
   const [albumId, setAlbumId] = useState("");
   const [arquivo, setArquivo] = useState<File | null>(null);
 
-  const [artistas, setArtistas] = useState<any[]>([]);
-  const [albuns, setAlbuns] = useState<any[]>([]);
+  const [artistas, setArtistas] = useState<Artista[]>([]);
+  const [albuns, setAlbuns] = useState<Album[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -103,8 +105,9 @@ export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
       setArquivo(null);
       setOpen(false);
       onSuccess?.();
-    } catch (err: any) {
-      setErro(err.message || "Erro inesperado");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro inesperado";
+      setErro(errorMessage);
     } finally {
       setLoading(false);
     }
