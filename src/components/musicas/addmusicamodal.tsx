@@ -38,8 +38,8 @@ export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const a1 = await fetch("http://localhost:1024/api/artistas");
-        const a2 = await fetch("http://localhost:1024/api/albums");
+        const a1 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas`);
+        const a2 = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/albums`);
         if (!a1.ok || !a2.ok) throw new Error("Erro ao buscar dados");
         const a1Data = await a1.json();
         const a2Data = await a2.json();
@@ -65,11 +65,14 @@ export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
         const formData = new FormData();
         formData.append("file", arquivo);
 
-        const uploadRes = await fetch("http://localhost:1024/api/uploads", {
-          method: "POST",
-          headers: { Authorization: `${token}` },
-          body: formData,
-        });
+        const uploadRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/uploads`,
+          {
+            method: "POST",
+            headers: { Authorization: `${token}` },
+            body: formData,
+          }
+        );
 
         if (!uploadRes.ok) throw new Error("Erro ao fazer upload do arquivo");
 
@@ -77,21 +80,24 @@ export function AddMusicaModal({ onSuccess, albumId: propAlbumId }: Props) {
         uploadId = uploadData.id;
       }
 
-      const musicaRes = await fetch("http://localhost:1024/api/musicas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify({
-          titulo,
-          duracao: Number(duracao),
-          compositor,
-          artistaId: Number(artistaId),
-          albumId: propAlbumId ? Number(propAlbumId) : Number(albumId),
-          uploadId,
-        }),
-      });
+      const musicaRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/musicas`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({
+            titulo,
+            duracao: Number(duracao),
+            compositor,
+            artistaId: Number(artistaId),
+            albumId: propAlbumId ? Number(propAlbumId) : Number(albumId),
+            uploadId,
+          }),
+        }
+      );
 
       if (!musicaRes.ok) throw new Error("Erro ao criar música");
 

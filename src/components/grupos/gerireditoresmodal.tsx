@@ -39,7 +39,7 @@ export function GerirEditoresModal({ grupoId, open, onClose }: Props) {
     async function fetchEditores() {
       try {
         const res = await fetch(
-          `http://localhost:1024/api/grupos/${grupoId}/editors`,
+          `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}/editors`,
           {
             headers: {
               Authorization: `${token}`,
@@ -60,7 +60,7 @@ export function GerirEditoresModal({ grupoId, open, onClose }: Props) {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:1024/api/grupos/${grupoId}/editors`,
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}/editors`,
         {
           method: "POST",
           headers: {
@@ -84,7 +84,7 @@ export function GerirEditoresModal({ grupoId, open, onClose }: Props) {
   async function removerEditor(editorId: number) {
     try {
       const res = await fetch(
-        `http://localhost:1024/api/grupos/${grupoId}/editors/${editorId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}/editors/${editorId}`,
         {
           method: "DELETE",
           headers: {

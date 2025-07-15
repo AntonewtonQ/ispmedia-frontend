@@ -34,7 +34,7 @@ export function AddAlbumModal({ onSuccess }: Props) {
   useEffect(() => {
     async function fetchArtistas() {
       try {
-        const res = await fetch("http://localhost:1024/api/artistas");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas`);
         if (!res.ok) throw new Error("Erro ao buscar artistas");
         const data = await res.json();
         setArtistas(data);
@@ -58,20 +58,23 @@ export function AddAlbumModal({ onSuccess }: Props) {
         const formData = new FormData();
         formData.append("file", imagem);
 
-        const uploadRes = await fetch("http://localhost:1024/api/uploads", {
-          method: "POST",
-          headers: {
-            Authorization: `${token}`,
-          },
-          body: formData,
-        });
+        const uploadRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/uploads`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `${token}`,
+            },
+            body: formData,
+          }
+        );
 
         if (!uploadRes.ok) throw new Error("Erro ao fazer upload da imagem");
         const uploadData = await uploadRes.json();
         uploadId = uploadData.id;
       }
 
-      const res = await fetch("http://localhost:1024/api/albums", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/albums`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -32,7 +32,7 @@ export function AdicionarMusicasNaPlaylistModal({
   useEffect(() => {
     async function fetchMusicas() {
       try {
-        const res = await fetch("http://localhost:1024/api/musicas", {
+        const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/musicas", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `${token}`,
@@ -51,7 +51,7 @@ export function AdicionarMusicasNaPlaylistModal({
   async function adicionarMusica(musicaId: number) {
     try {
       const res = await fetch(
-        `http://localhost:1024/api/playlists/${playlistId}/musicas/${musicaId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlistId}/musicas/${musicaId}`,
         {
           method: "POST",
           headers: {

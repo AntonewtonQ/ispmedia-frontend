@@ -23,7 +23,9 @@ const DashboardPage = () => {
   useEffect(() => {
     async function fetchArtistas() {
       try {
-        const response = await fetch("http://localhost:1024/api/artistas");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/artistas`
+        );
         if (!response.ok) throw new Error("Erro ao buscar artistas");
         const data = await response.json();
         setArtistas(data);

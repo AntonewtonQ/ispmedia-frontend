@@ -39,7 +39,7 @@ export function EditMusicaModal({ musica, token, onClose, onSuccess }: Props) {
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/musicas/${musica.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/musicas/${musica.id}`,
         {
           method: "PUT",
           headers: {

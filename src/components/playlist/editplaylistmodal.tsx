@@ -35,7 +35,7 @@ export function EditPlaylistModal({ playlist, onSuccess, onClose }: Props) {
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/playlists/${playlist.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlist.id}`,
         {
           method: "PUT",
           headers: {

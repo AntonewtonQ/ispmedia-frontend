@@ -57,7 +57,7 @@ export const UserNavbar = () => {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => router.push("/notificacoes")}
+          onClick={() => router.push("/dashboard/notificacoes")}
         >
           <Bell className="w-5 h-5" />
         </Button>

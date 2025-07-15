@@ -15,7 +15,7 @@ export default function AlbumList() {
 
   async function fetchAlbuns() {
     try {
-      const response = await fetch("http://localhost:1024/api/albums");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/albums`);
       if (!response.ok) {
         throw new Error("Erro ao buscar álbuns");
       }
@@ -43,7 +43,7 @@ export default function AlbumList() {
               <img
                 src={
                   album.uploadId
-                    ? `http://localhost:1024/files/${album.uploadId}`
+                    ? `${process.env.NEXT_PUBLIC_FILES_URL}/${album.uploadId}`
                     : ""
                 }
                 alt={album.titulo}

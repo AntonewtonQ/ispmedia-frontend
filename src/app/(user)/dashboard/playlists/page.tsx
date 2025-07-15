@@ -16,9 +16,12 @@ export default function PlaylistPage() {
   useEffect(() => {
     async function fetchPlaylists() {
       try {
-        const res = await fetch("http://localhost:1024/api/playlists", {
-          headers: { Authorization: `${token}` },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/playlists`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Erro ao carregar playlists");
 
         const data = await res.json();

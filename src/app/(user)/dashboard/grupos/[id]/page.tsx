@@ -15,11 +15,14 @@ export default function GrupoPage() {
   useEffect(() => {
     async function fetchGrupo() {
       try {
-        const res = await fetch(`http://localhost:1024/api/grupos/${id}`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/grupos/${id}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
         if (!res.ok) throw new Error("Erro ao carregar grupo");
         const data = await res.json();
         setGrupo(data);

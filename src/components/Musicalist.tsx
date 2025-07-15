@@ -15,7 +15,9 @@ export default function Musicalist() {
 
   async function fetchMusicas() {
     try {
-      const response = await fetch("http://localhost:1024/api/musicas");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/musicas`
+      );
       if (!response.ok) {
         throw new Error("Erro ao buscar músicas");
       }

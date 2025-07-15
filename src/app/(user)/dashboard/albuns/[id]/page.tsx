@@ -40,7 +40,7 @@ export default function AlbumDetalhesPage() {
   async function handleAtualizarCritica(criticaId: number) {
     try {
       const res = await fetch(
-        `http://localhost:1024/api/criticas/${criticaId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/criticas/${criticaId}`,
         {
           method: "PUT",
           headers: {
@@ -58,7 +58,7 @@ export default function AlbumDetalhesPage() {
 
       setEditandoCriticaId(null);
       const atualizada = await fetch(
-        `http://localhost:1024/api/albums/${albumId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/albums/${albumId}`,
         {
           headers: { Authorization: `${token}` },
         }
@@ -75,7 +75,7 @@ export default function AlbumDetalhesPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/criticas/${criticaId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/criticas/${criticaId}`,
         {
           method: "DELETE",
           headers: { Authorization: `${token}` },
@@ -85,7 +85,7 @@ export default function AlbumDetalhesPage() {
       if (!res.ok) throw new Error("Erro ao remover crítica");
 
       const atualizada = await fetch(
-        `http://localhost:1024/api/albums/${albumId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/albums/${albumId}`,
         {
           headers: { Authorization: `${token}` },
         }
@@ -100,9 +100,12 @@ export default function AlbumDetalhesPage() {
   useEffect(() => {
     async function fetchAlbum() {
       try {
-        const res = await fetch(`http://localhost:1024/api/albums/${albumId}`, {
-          headers: { Authorization: `${token}` },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/albums/${albumId}`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
         if (!res.ok) throw new Error("Erro ao buscar álbum");
         const data = await res.json();
         setAlbum(data);
@@ -110,7 +113,7 @@ export default function AlbumDetalhesPage() {
         // Upload da imagem do álbum
         if (data.uploadId) {
           const uploadRes = await fetch(
-            `http://localhost:1024/api/uploads/${data.uploadId}`,
+            `${process.env.NEXT_PUBLIC_API_URL}/uploads/${data.uploadId}`,
             {
               headers: { Authorization: `${token}` },
             }
@@ -127,7 +130,7 @@ export default function AlbumDetalhesPage() {
         );
         const uploadResults = await Promise.all(
           musicasComUpload.map((m: any) =>
-            fetch(`http://localhost:1024/api/uploads/${m.uploadId}`, {
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/uploads/${m.uploadId}`, {
               headers: { Authorization: `${token}` },
             })
               .then((res) => (res.ok ? res.json() : null))
@@ -156,7 +159,7 @@ export default function AlbumDetalhesPage() {
     setErro(null);
 
     try {
-      const res = await fetch("http://localhost:1024/api/criticas", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/criticas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -190,7 +193,7 @@ export default function AlbumDetalhesPage() {
             <div className="w-full md:w-64 h-64 bg-gray-200 rounded overflow-hidden flex items-center justify-center">
               {upload?.nomeArquivo ? (
                 <img
-                  src={`http://localhost:1024/files/${upload.nomeArquivo}`}
+                  src={`${process.env.NEXT_PUBLIC_FILES_URL}/${upload.nomeArquivo}`}
                   alt={album.titulo}
                   className="w-full h-full object-cover"
                 />
@@ -220,9 +223,12 @@ export default function AlbumDetalhesPage() {
               <AddMusicaModal
                 albumId={album.id}
                 onSuccess={() => {
-                  fetch(`http://localhost:1024/api/albums/${album.id}`, {
-                    headers: { Authorization: `${token}` },
-                  })
+                  fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/albums/${album.id}`,
+                    {
+                      headers: { Authorization: `${token}` },
+                    }
+                  )
                     .then((res) => res.json())
                     .then((data) => setAlbum(data));
                 }}
@@ -245,7 +251,7 @@ export default function AlbumDetalhesPage() {
                       {m.uploadId && uploadsMusicas[m.uploadId]?.nomeArquivo ? (
                         <audio
                           controls
-                          src={`http://localhost:1024/files/${
+                          src={`${process.env.NEXT_PUBLIC_FILES_URL}/${
                             uploadsMusicas[m.uploadId].nomeArquivo
                           }`}
                           className="w-full mt-1"
@@ -275,7 +281,7 @@ export default function AlbumDetalhesPage() {
                     async function handleAtualizarCritica() {
                       try {
                         const res = await fetch(
-                          `http://localhost:1024/api/criticas/${critica.id}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/criticas/${critica.id}`,
                           {
                             method: "PUT",
                             headers: {
@@ -295,7 +301,7 @@ export default function AlbumDetalhesPage() {
                         setEditando(false);
                         // Atualiza a lista completa
                         const atualizada = await fetch(
-                          `http://localhost:1024/api/albums/${albumId}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/albums/${albumId}`,
                           {
                             headers: { Authorization: `${token}` },
                           }
@@ -315,7 +321,7 @@ export default function AlbumDetalhesPage() {
 
                       try {
                         const res = await fetch(
-                          `http://localhost:1024/api/criticas/${critica.id}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/criticas/${critica.id}`,
                           {
                             method: "DELETE",
                             headers: {
@@ -327,7 +333,7 @@ export default function AlbumDetalhesPage() {
                         if (!res.ok) throw new Error("Erro ao remover crítica");
 
                         const atualizada = await fetch(
-                          `http://localhost:1024/api/albums/${albumId}`,
+                          `${process.env.NEXT_PUBLIC_API_URL}/albums/${albumId}`,
                           {
                             headers: { Authorization: `${token}` },
                           }

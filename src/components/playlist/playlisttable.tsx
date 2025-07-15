@@ -38,12 +38,15 @@ export default function PlaylistTable({
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:1024/api/playlists/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao deletar playlist");
 

@@ -38,7 +38,7 @@ const Artistatable = ({ termoPesquisa }: ArtistatableProps) => {
   useEffect(() => {
     async function fetchArtistas() {
       try {
-        const res = await fetch("http://localhost:1024/api/artistas");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas`);
         if (!res.ok) throw new Error("Erro ao buscar artistas");
         const data = await res.json();
         setArtistas(data);
@@ -61,12 +61,12 @@ const Artistatable = ({ termoPesquisa }: ArtistatableProps) => {
     if (!detalhes[artistaId]) {
       try {
         const [albunsRes, musicasRes] = await Promise.all([
-          fetch(`http://localhost:1024/api/artistas/${artistaId}/albuns`).then(
-            (res) => res.json()
-          ),
-          fetch(`http://localhost:1024/api/artistas/${artistaId}/musicas`).then(
-            (res) => res.json()
-          ),
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/artistas/${artistaId}/albuns`
+          ).then((res) => res.json()),
+          fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/artistas/${artistaId}/musicas`
+          ).then((res) => res.json()),
         ]);
 
         setDetalhes((prev) => ({
@@ -93,12 +93,15 @@ const Artistatable = ({ termoPesquisa }: ArtistatableProps) => {
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:1024/api/artistas/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/artistas/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao eliminar artista");
 
@@ -208,7 +211,7 @@ const Artistatable = ({ termoPesquisa }: ArtistatableProps) => {
               setArtistaParaEditar(null);
               // refetch para manter sincronizado
               setLoading(true);
-              fetch("http://localhost:1024/api/artistas")
+              fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas`)
                 .then((res) => res.json())
                 .then((data) => setArtistas(data))
                 .finally(() => setLoading(false));

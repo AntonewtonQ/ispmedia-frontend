@@ -30,7 +30,7 @@ export function AddArtistaModal({ onSuccess }: { onSuccess?: () => void }) {
 
     try {
       console.log("Token:", token); // <-- Verifique se o token está sendo passado corretamente
-      const res = await fetch("http://localhost:1024/api/artistas", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/artistas`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

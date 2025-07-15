@@ -4,18 +4,21 @@ import { notFound } from "next/navigation";
 type Params = { params: { id: string } };
 
 export default async function ArtistaDetalhePage({ params }: Params) {
-  const res = await fetch(`http://localhost:1024/api/artistas/${params.id}`, {
-    cache: "no-store",
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/artistas/${params.id}`,
+    {
+      cache: "no-store",
+    }
+  );
   if (!res.ok) return notFound();
 
   const artista = await res.json();
 
   const albunsRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/albuns`
+    `${process.env.NEXT_PUBLIC_API_URL}/artistas/${params.id}/albuns`
   );
   const musicasRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/musicas`
+    `${process.env.NEXT_PUBLIC_API_URL}/artistas/${params.id}/musicas`
   );
   const albuns = albunsRes.ok ? await albunsRes.json() : [];
   const musicas = musicasRes.ok ? await musicasRes.json() : [];

@@ -36,7 +36,7 @@ const GrupoTable = ({ termoPesquisa }: Props) => {
   useEffect(() => {
     async function fetchGrupos() {
       try {
-        const res = await fetch("http://localhost:1024/api/grupos", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/grupos`, {
           headers: {
             Authorization: `${token}`,
           },
@@ -54,11 +54,14 @@ const GrupoTable = ({ termoPesquisa }: Props) => {
 
     async function fetchMe() {
       try {
-        const res = await fetch("http://localhost:1024/api/auth/profile", {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/profile`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
 
         if (!res.ok) throw new Error("Erro ao obter usuário logado");
         const user = await res.json();
@@ -91,17 +94,44 @@ const GrupoTable = ({ termoPesquisa }: Props) => {
     return "PENDENTE";
   }
 
+  async function aceitarConvite(grupoId: number) {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}/aceitar`,
+        {
+          method: "POST",
+          headers: { Authorization: `${token}` },
+        }
+      );
+      if (!res.ok) throw new Error("Erro ao aceitar convite");
+
+      // Recarrega os grupos
+      const novaLista = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos`,
+        {
+          headers: { Authorization: `${token}` },
+        }
+      ).then((res) => res.json());
+      setGrupos(novaLista);
+    } catch (err) {
+      alert("Erro ao aceitar convite");
+    }
+  }
+
   async function handleDeletarGrupo(grupoId: number) {
     const confirmar = confirm("Tem certeza que deseja eliminar este grupo?");
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:1024/api/grupos/${grupoId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao eliminar grupo");
 
@@ -178,13 +208,21 @@ const GrupoTable = ({ termoPesquisa }: Props) => {
                       </>
                     )}
                     {(status === "EDITOR" || status === "MEMBRO") && (
-                      <Button size="sm" onClick={() => alert("Ver grupo")}>
+                      <Button
+                        size="sm"
+                        onClick={() =>
+                          router.push(`/dashboard/grupos/${grupo.id}`)
+                        }
+                      >
                         Ver grupo
                       </Button>
                     )}
                     {status === "PENDENTE" && (
-                      <Button size="sm" variant="outline" disabled>
-                        Aguardando aprovação
+                      <Button
+                        size="sm"
+                        onClick={() => aceitarConvite(grupo.id)}
+                      >
+                        Aceitar convite
                       </Button>
                     )}
                   </TableCell>

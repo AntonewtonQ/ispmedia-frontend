@@ -45,7 +45,7 @@ export function EditArtistaModal({
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/artistas/${artista.id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/artistas/${artista.id}`,
         {
           method: "PUT",
           headers: {

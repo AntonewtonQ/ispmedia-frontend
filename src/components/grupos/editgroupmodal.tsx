@@ -35,14 +35,17 @@ export function EditGrupoModal({ grupo, onSuccess, onClose }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:1024/api/grupos/${grupo.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify({ nome, descricao }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupo.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ nome, descricao }),
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao atualizar grupo");
 

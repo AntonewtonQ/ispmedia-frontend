@@ -35,7 +35,7 @@ export default function PlaylistDetalhesPage() {
     async function fetchPlaylist() {
       try {
         const res = await fetch(
-          `http://localhost:1024/api/playlists/${playlistId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlistId}`,
           {
             headers: { Authorization: `${token}` },
           }
@@ -50,7 +50,7 @@ export default function PlaylistDetalhesPage() {
         await Promise.all(
           data.musicas.map(async (m: any) => {
             const musicaRes = await fetch(
-              `http://localhost:1024/api/musicas/${m.musicaId}`,
+              `${process.env.NEXT_PUBLIC_API_URL}/musicas/${m.musicaId}`,
               {
                 headers: { Authorization: `${token}` },
               }
@@ -61,7 +61,7 @@ export default function PlaylistDetalhesPage() {
 
               if (musica.uploadId) {
                 const uploadRes = await fetch(
-                  `http://localhost:1024/api/uploads/${musica.uploadId}`,
+                  `${process.env.NEXT_PUBLIC_API_URL}/uploads/${musica.uploadId}`,
                   {
                     headers: { Authorization: `${token}` },
                   }
@@ -94,7 +94,7 @@ export default function PlaylistDetalhesPage() {
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/playlists/${playlistId}/musicas/${musicaId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlistId}/musicas/${musicaId}`,
         {
           method: "DELETE",
           headers: { Authorization: `${token}` },
@@ -104,7 +104,7 @@ export default function PlaylistDetalhesPage() {
       if (!res.ok) throw new Error("Erro ao remover música da playlist");
 
       const reloadRes = await fetch(
-        `http://localhost:1024/api/playlists/${playlistId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlistId}`,
         {
           headers: { Authorization: `${token}` },
         }
@@ -198,7 +198,7 @@ export default function PlaylistDetalhesPage() {
                           {m?.uploadId && uploads[m.uploadId] ? (
                             <audio
                               controls
-                              src={`http://localhost:1024/files/${
+                              src={`${process.env.NEXT_PUBLIC_FILES_URL}/${
                                 uploads[m.uploadId].nomeArquivo
                               }`}
                               className="w-full"

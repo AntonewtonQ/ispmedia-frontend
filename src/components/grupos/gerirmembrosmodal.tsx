@@ -40,11 +40,14 @@ export function GerirMembrosModal({ grupoId, open, onClose }: Props) {
     if (!open) return;
     async function fetchMembros() {
       try {
-        const res = await fetch(`http://localhost:1024/api/grupos/${grupoId}`, {
-          headers: {
-            Authorization: `${token}`,
-          },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}`,
+          {
+            headers: {
+              Authorization: `${token}`,
+            },
+          }
+        );
         const data = await res.json();
         setMembros(data.membros);
       } catch {
@@ -61,7 +64,7 @@ export function GerirMembrosModal({ grupoId, open, onClose }: Props) {
     try {
       console.log("Convidando usuário:", grupoId, usuarioId);
       const res = await fetch(
-        `http://localhost:1024/api/grupos/${grupoId}/invite`,
+        `${process.env.NEXT_PUBLIC_API_URL}/grupos/${grupoId}/invite`,
         {
           method: "POST",
           headers: {

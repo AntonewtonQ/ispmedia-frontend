@@ -32,7 +32,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
 
       try {
         const res = await fetch(
-          `http://localhost:1024/api/uploads/${album.uploadId}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/uploads/${album.uploadId}`,
           {
             headers: token ? { Authorization: `${token}` } : {},
           }
@@ -70,7 +70,7 @@ export function AlbumCard({ album, onEdit, onDelete }: AlbumCardProps) {
       <CardHeader className="p-0 h-40 overflow-hidden rounded-t-md">
         {upload?.nomeArquivo ? (
           <img
-            src={`http://localhost:1024/files/${upload.nomeArquivo}`}
+            src={`${process.env.NEXT_PUBLIC_FILES_URL}/${upload.nomeArquivo}`}
             alt={album.titulo}
             className="w-full h-full object-cover"
           />

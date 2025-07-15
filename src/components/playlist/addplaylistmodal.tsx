@@ -36,7 +36,7 @@ export function AddPlaylistModal({ onSuccess }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:1024/api/playlists", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/playlists`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

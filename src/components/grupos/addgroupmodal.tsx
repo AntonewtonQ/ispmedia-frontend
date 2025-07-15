@@ -32,7 +32,7 @@ export function AddGrupoModal({ onSuccess }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:1024/api/grupos", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/grupos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

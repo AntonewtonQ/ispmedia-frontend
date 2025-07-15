@@ -31,9 +31,12 @@ export function GerirPlaylistsDaMusicaModal({ musicaId }: Props) {
     async function fetchPlaylists() {
       setErro(null);
       try {
-        const res = await fetch("http://localhost:1024/api/playlists", {
-          headers: { Authorization: `${token}` },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/playlists`,
+          {
+            headers: { Authorization: `${token}` },
+          }
+        );
         if (!res.ok) throw new Error();
         const data: Playlist[] = await res.json();
         setPlaylists(data);
@@ -62,7 +65,7 @@ export function GerirPlaylistsDaMusicaModal({ musicaId }: Props) {
 
     try {
       const res = await fetch(
-        `http://localhost:1024/api/playlists/${playlistId}/musicas/${musicaId}`,
+        `${process.env.NEXT_PUBLIC_API_URL}/playlists/${playlistId}/musicas/${musicaId}`,
         {
           method: metodo,
           headers: { Authorization: `${token}` },

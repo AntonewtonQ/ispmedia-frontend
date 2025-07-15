@@ -22,7 +22,7 @@ const AlbumTable = ({ termoPesquisa }: AlbumTableProps) => {
   useEffect(() => {
     async function fetchAlbuns() {
       try {
-        const res = await fetch("http://localhost:1024/api/albums", {
+        const res = await fetch("${process.env.NEXT_PUBLIC_API_URL}/albums", {
           headers: { Authorization: `${token}` },
         });
         if (!res.ok) throw new Error("Erro ao buscar álbuns");
@@ -43,12 +43,15 @@ const AlbumTable = ({ termoPesquisa }: AlbumTableProps) => {
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:1024/api/albums/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/albums/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao deletar álbum");
 

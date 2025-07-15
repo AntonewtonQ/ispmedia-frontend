@@ -31,11 +31,14 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
     if (uploads[id]) return uploads[id]; // já foi buscado
 
     try {
-      const res = await fetch(`http://localhost:1024/api/uploads/${id}`, {
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/uploads/${id}`,
+        {
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
       if (!res.ok) throw new Error();
       const data = await res.json();
 
@@ -52,7 +55,7 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
 
     async function fetchMusicas() {
       try {
-        const res = await fetch("http://localhost:1024/api/musicas");
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/musicas`);
         if (!res.ok) throw new Error("Erro ao buscar músicas");
         const data = await res.json();
         setMusicas(data);
@@ -79,12 +82,15 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
     if (!confirmar) return;
 
     try {
-      const res = await fetch(`http://localhost:1024/api/musicas/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `${token}`,
-        },
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/musicas/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao eliminar música");
 
@@ -140,7 +146,7 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
                   {musica.uploadId && uploads[musica.uploadId]?.nomeArquivo ? (
                     <audio
                       controls
-                      src={`http://localhost:1024/files/${
+                      src={`${process.env.NEXT_PUBLIC_FILES_URL}/${
                         uploads[musica.uploadId].nomeArquivo
                       }`}
                       className="w-48"
@@ -163,7 +169,7 @@ const MusicaTable = ({ termoPesquisa }: MusicaTableProps) => {
           onSuccess={() => {
             setMusicaParaEditar(null);
             setLoading(true);
-            fetch("http://localhost:1024/api/musicas")
+            fetch(`${process.env.NEXT_PUBLIC_API_URL}/musicas`)
               .then((res) => res.json())
               .then((data) => setMusicas(data))
               .finally(() => setLoading(false));

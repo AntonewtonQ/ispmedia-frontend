@@ -32,14 +32,17 @@ export function EditAlbumModal({ album, token, onSuccess, onClose }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch(`http://localhost:1024/api/albums/${album.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify({ titulo, descricao }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/albums/${album.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify({ titulo, descricao }),
+        }
+      );
 
       if (!res.ok) throw new Error("Erro ao atualizar álbum");
 
