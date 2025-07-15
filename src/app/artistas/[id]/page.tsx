@@ -1,10 +1,9 @@
 // app/artistas/[id]/page.tsx
 import { notFound } from "next/navigation";
 
-type Params = { params: { id: string } };
-
-export default async function ArtistaDetalhePage({ params }: Params) {
-  const res = await fetch(`http://localhost:1024/api/artistas/${params.id}`, {
+export default async function ArtistaDetalhePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const res = await fetch(`http://localhost:1024/api/artistas/${id}`, {
     cache: "no-store",
   });
   if (!res.ok) return notFound();
@@ -12,10 +11,10 @@ export default async function ArtistaDetalhePage({ params }: Params) {
   const artista = await res.json();
 
   const albunsRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/albuns`
+    `http://localhost:1024/api/artistas/${id}/albuns`
   );
   const musicasRes = await fetch(
-    `http://localhost:1024/api/artistas/${params.id}/musicas`
+    `http://localhost:1024/api/artistas/${id}/musicas`
   );
   const albuns = albunsRes.ok ? await albunsRes.json() : [];
   const musicas = musicasRes.ok ? await musicasRes.json() : [];
